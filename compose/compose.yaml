@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: ../
+      dockerfile: compose/web.Dockerfile
+      # args:
+      #   NEXT_PUBLIC_CLIENTVAR: "clientvar"
+    ports:
+      - 3000:3000
+      # - 5555:5555
+    volumes:
+      - ../:/app
+    environment:
+      - MONGO_URI=mongodb://db:27017/auth-note-app
+
+    depends_on:
+      - db
+  db:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+volumes:
+  mongodb_data:
